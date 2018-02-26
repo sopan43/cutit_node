@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
                 if (error) {
                     return res.json({ success: 0, message: 'successfully 1' });
                 } else {
-                    res.sendFile(path.join(__dirname + '/templates/shorturl.html'));
+                    res.sendFile((path.join(__dirname + '/templates/shorturl.html')));
                 }
             })
         });
