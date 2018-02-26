@@ -1,24 +1,57 @@
 var conn = require('../connection.js');
 var express = require('express');
 var randomstring = require('randomstring');
+var formidable = require('formidable');
+var bodyParser = require('body-parser');
 var path = require('path');
 var router = express.Router();
+var app = express();
 
+app.use(bodyParser.json());
+app.use(express.static(__dirname));
 /********************************************************************************************************************
- *                                                                                                            		*
- *                                                 	GET gentare 	       											*
- *                                                                                                         			*
+ *                                          `                                                                       *
+ *                                                  GET gentare                                                     *
+ *                                                                                                                  *
  *******************************************************************************************************************/
+console.log('Mittal');
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + '/../public/index.html'));
+    console.log(req.headers.host);
+    res.sendFile(path.join(__dirname + '/templates/index.html'));
 });
 
 router.post('/', (req, res) => {
-    var rstring = genrate_unique_key();
-    //  console.log('ef ' + rstring);
-    return res.json({ success: 1, message: 'successfully 1' });
+    console.log('fwjf');
+    genrate_unique_key().then((rstring) => {
+        console.log(req.headers.host + '/' + rstring);
 
+        var fields = [];
+        var form = new formidable.IncomingForm();
+
+        form.on('field', function(field, value) {
+            fields[field] = value;
+        });
+
+        form.on('end', function() {
+            var upload_object = {
+                long_url: fields.original_url,
+                short_code: rstring
+            };
+            conn.query('INSERT INTO short_urls SET ?', [upload_object], (error, response) => {
+                if (error) {
+                    return res.json({ success: 0, message: 'successfully 1' });
+                } else {
+                    res.sendFile(path.join(__dirname + '/templates/shorturl.html'));
+                }
+            })
+        });
+        form.parse(req);
+
+    }, (error) => {
+        return res.json({ success: 0, message: 'Error ' + error });
+    });
 });
+
 
 router.get('/:cut', (req, res) => {
     console.log(req.params.cut);
@@ -37,23 +70,28 @@ router.get('/:cut', (req, res) => {
 
 
 function genrate_unique_key() {
-    var rstring = randomstring.generate(7);
-    //  console.log(rstring);
-    var returnstring = check_unique_key(rstring);
-    console.log('d '+returnstring);
-    return returnstring;
+    return new Promise((resolve, reject) => {
+        var rstring = randomstring.generate(7);
+        check_unique_key(rstring).then((value) => {
+            resolve(value);
+        }, (error) => {
+            reject(error);
+        });
+    });
+    // console.log('fe ' + returnstring);
 }
 
 function check_unique_key(rstring, callback) {
-    conn.query('SELECT short_code FROM short_urls WHERE short_code = ?', [rstring], (error, result) => {
-        if (error) {
-            return res.json({ success: 1, message: 'error in query ' + error });
-        } else if (result.length === 0) {
-            console.log(rstring);
-            return rstring;
-        } else {
-            genrate_unique_key();
-        }
+    return new Promise((resolve, reject) => {
+        conn.query('SELECT short_code FROM short_urls WHERE short_code = ?', [rstring], (error, result) => {
+            if (error) {
+                reject('error in query ' + error);
+            } else if (result.length === 0) {
+                resolve(rstring);
+            } else {
+                genrate_unique_key();
+            }
+        });
     });
 }
 
