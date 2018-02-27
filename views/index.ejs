@@ -1,29 +1,26 @@
+
 <!DOCTYPE html>
 <html>
 
 <head>
-  title= name
   <meta charset="utf-8">
   <title>CutIT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="/templates/css/style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body class="centered-form">
   <div class="centered-form__form">
-  <form action="" method="POST" >
+  <form action="/short" method="POST" name="Enter_url_form">
       <div class="form-field">
-        <h3>CitIT<h3>
+        <h3>CutIT</h3>
       </div>
       <div class="form-field">
-        <center>
-          <script type="text/javascript">
-            console.log({{ name }}); 
-          </script>
-        
-
-          <label>Genrated Successfully</label>
-        </center>
+        <label>Original Url</label>
+        <input type="text" name="original_url" autofocus/>
+      </div>
+      <div class="form-field">
+        <button>CutIT</button>
       </div>
     </form>
   </div>

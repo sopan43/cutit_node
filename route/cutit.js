@@ -1,51 +1,40 @@
 var conn = require('../connection.js');
 var express = require('express');
 var randomstring = require('randomstring');
-var formidable = require('formidable');
 var bodyParser = require('body-parser');
 var path = require('path');
 var router = express.Router();
 var app = express();
 
-app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('css'));
+app.set('view engine', 'ejs');
 /********************************************************************************************************************
  *                                          `                                                                       *
  *                                                  GET gentare                                                     *
  *                                                                                                                  *
  *******************************************************************************************************************/
-console.log('Mittal');
-router.get('/', (req, res) => {
-    console.log(req.headers.host);
-    res.sendFile(path.join(__dirname + '/templates/index.html'));
+app.get('/', (req, res) => {
+    //  console.log(req.headers.host);
+    res.render('index');
 });
 
-router.post('/', (req, res) => {
-    console.log('fwjf');
+app.post('/short', (req, res) => {
+    //  console.log('fwjf');
     genrate_unique_key().then((rstring) => {
-        console.log(req.headers.host + '/' + rstring);
-
-        var fields = [];
-        var form = new formidable.IncomingForm();
-
-        form.on('field', function(field, value) {
-            fields[field] = value;
+        //    console.log(req.headers.host + '/' + rstring);
+        var url = req.headers.host + '/' + rstring;
+        var upload_object = {
+            long_url: req.body.original_url,
+            short_code: rstring
+        };
+        conn.query('INSERT INTO short_urls SET ?', [upload_object], (error, response) => {
+            if (error) {
+                return res.json({ success: 0, message: 'error' });
+            } else {
+                res.render('shorturl', { url: url });
+            }
         });
-
-        form.on('end', function() {
-            var upload_object = {
-                long_url: fields.original_url,
-                short_code: rstring
-            };
-            conn.query('INSERT INTO short_urls SET ?', [upload_object], (error, response) => {
-                if (error) {
-                    return res.json({ success: 0, message: 'successfully 1' });
-                } else {
-                    res.sendFile((path.join(__dirname + '/templates/shorturl.html')));
-                }
-            })
-        });
-        form.parse(req);
 
     }, (error) => {
         return res.json({ success: 0, message: 'Error ' + error });
@@ -53,15 +42,14 @@ router.post('/', (req, res) => {
 });
 
 
-router.get('/:cut', (req, res) => {
-    console.log(req.params.cut);
+app.get('/:cut', (req, res) => {
     conn.query('SELECT long_url FROM short_urls WHERE short_code = ?', [req.params.cut], (error, long_url) => {
         if (error) {
 
         } else {
-            console.log(long_url[0].long_url);
+            //  console.log(long_url[0].long_url);
             res.statusCode = 302;
-            res.setHeader('Location', long_url[0].long_url);
+            res.redirect(long_url[0].long_url);
             res.end('Redirecting to ' + long_url[0].long_url);
         }
     });
@@ -96,4 +84,4 @@ function check_unique_key(rstring, callback) {
 }
 
 
-module.exports = router;
+module.exports = app;
