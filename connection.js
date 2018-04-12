@@ -1,16 +1,10 @@
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-    // user: process.env.USER_CUTIT,
-    // password: process.env.PASS_CUTIT,
-    // database: process.env.DB_CUTIT,
-    // host: process.env.HOST_CUTIT
-
-    user: USER_CUTIT,
-    password: PASS_CUTIT,
-    database: DB_CUTIT,
-    host: HOST_CUTIT
-
+    user: process.env.USER_CUTIT,
+    password: process.env.PASS_CUTIT,
+    database: process.env.DB_CUTIT,
+    host: process.env.HOST_CUTIT
 });
 
 connection.connect(function(error) {

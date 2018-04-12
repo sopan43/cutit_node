@@ -3,6 +3,7 @@ var express = require('express');
 var randomstring = require('randomstring');
 var bodyParser = require('body-parser');
 var path = require('path');
+const sgMail = require('@sendgrid/mail');
 var router = express.Router();
 var app = express();
 
@@ -91,6 +92,40 @@ app.get('/short/url', (req, res) => {
     }
 });
 
+
+app.post('/feedback', (req, res) => {
+    var text = req.body.feedback;
+    var name = req.body.name;
+    var email = req.body.email;
+    if (name === '') {
+        name = 'No name'
+    }
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+        to: 'developer.cutit@gmail.com',
+        from: 'sopanmittal43@gmail.com',
+        subject: 'Feedback by ' + name,
+        text: text
+    };
+    sgMail.send(msg);
+
+    
+    if (email !== '') {
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        console.log(email);
+        const msg2 = {
+            to: email,
+            from: 'info.cutit@gmail.com',
+            subject: 'Thanks',
+            text: 'text'
+        };
+        sgMail.send(msg2);
+
+    }
+    res.send('DONE');
+});
+
+
 app.get('s/:cut', (req, res) => {
     conn.query('SELECT long_url FROM short_urls WHERE short_code = ?', [req.params.cut], (error, long_url) => {
         if (error) {
@@ -133,6 +168,8 @@ function check_unique_key(rstring, callback) {
         });
     });
 }
+
+app.post('/feedback')
 
 
 module.exports = app;

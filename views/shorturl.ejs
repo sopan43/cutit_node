@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title>CutIT</title>
-  
-  <script type="text/javascript" src="../assets/js/cutit.js"></script>
-   <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="../css/style.css"> 
-</head>
-<input type="hidden" id="myInput" value= <%= url %> >
-<body class="centered-form">
+  <% include ./partials/header %>
   <div class="centered-form__form">
   
       <div class="form-field">
@@ -29,6 +16,8 @@
       </div>
 
   </div>
+
+
  <script>
 function myFunction() {
   /* Get the text field */
@@ -45,5 +34,5 @@ function myFunction() {
   alert("Copied the text: " + copyText.value);
 } 
     </script>
-  </body>
-</html>
+
+  <% include ./partials/footer %>
