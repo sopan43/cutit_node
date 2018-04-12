@@ -4,8 +4,11 @@
 <head>
   <meta charset="utf-8">
   <title>CutIT</title>
+  
+  <script type="text/javascript" src="../assets/js/cutit.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="../css/style.css"> 
 </head>
 <input type="hidden" id="myInput" value= <%= url %> >
 <body class="centered-form">
@@ -35,8 +38,9 @@ function myFunction() {
   copyText.select();
 
   /* Copy the text inside the text field */
-  document.execCommand("Copy");
-
+  document.execCommand("copy");
+  
+  console.log(copyText.value);
   /* Alert the copied text */
   alert("Copied the text: " + copyText.value);
 } 

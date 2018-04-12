@@ -1,14 +1,10 @@
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-    // host: 'us-cdbr-iron-east-05.cleardb.net',
-    // user: 'bedbc9cc7d11fa',
-    // password: '0a93b38cd911cfa',
-    // database: 'heroku_1141cf6ca7b533b'
-    user: 'root',
-    password: 'root123',
-    database: 'cutit',
-    host: "127.0.0.1"
+    user: process.env.USER_CUTIT,
+    password: process.env.PASS_CUTIT,
+    database: process.env.DB_CUTIT,
+    host: process.env.HOST_CUTIT
 
 });
 
@@ -21,3 +17,4 @@ connection.connect(function(error) {
 });
 
 module.exports = connection;
+

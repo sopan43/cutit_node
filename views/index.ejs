@@ -4,26 +4,31 @@
 
 <head>
   <meta charset="utf-8">
+   <link rel="icon" href="../public/icon.png" type="image/gif" sizes="16x16">
+
   <title>CutIT</title>
+
+  <script type="text/javascript" src="../assets/js/cutit.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body class="centered-form">
-  <div class="centered-form__form">
+<body>
+
+<div class="center-form">
   <form action="/short" method="POST" name="Enter_url_form">
-      <div class="form-field">
-        <h3>CutIT</h3>
-      </div>
-      <div class="form-field">
-        <label>Original Url</label>
-        <input type="text" name="original_url" autofocus/>
-      </div>
-      <div class="form-field">
-        <button>CutIT</button>
-      </div>
+     
+     <ul>
+        <li><h3>CutIT</h3><hr></li>
+        <li><label>Original URL</label></li>
+        <li><input type="text" name="original_url" autofocus/></li>
+         <li><label>Custom URL </label></li>
+        <li><input type="text" name="custom_url" autofocus/></li>
+        <li><button>CutIT</button></li>
+      </ul>
     </form>
-  </div>
+</div>
 </body>
 
 </html>
