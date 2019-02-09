@@ -9,7 +9,7 @@
   "author": "Sopan Mittal (sopanmittal43@gmail.com)",
   "license": "ISC",
   "dependencies": {
-    "@sendgrid/mail": "^6.2.1",
+    "@sendgrid/mail": "^6.3.1",
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
     "express": "^4.16.2",

@@ -3,7 +3,7 @@ const express = require('express');
 const randomstring = require('randomstring');
 const bodyParser = require('body-parser');
 const path = require('path');
-// const sgMail = require('@sendgrid/mail');
+const sgMail = require('@sendgrid/mail');
 const router = express.Router();
 const app = express();
 
@@ -30,7 +30,7 @@ app.post('/short', (req, res) => {
             .then((data) => {
                 if (data[0].length === 0) {
                     url = req.headers.host + '/' + req.body.custom_url;
-                    conn.query('INSERT INTO short_urls (long_url, short_code) VALUES (?, )', [req.body.original_url, req.body.custom_url])
+                    conn.query('INSERT INTO short_urls (long_url, short_code) VALUES (?, ?)', [req.body.original_url, req.body.custom_url])
                         .then(() => {
                             res.redirect('/short/url');
                         })
@@ -84,52 +84,52 @@ app.get('/short/url', (req, res) => {
 });
 
 
-// app.post('/feedback', (req, res) => {
-//     var text = req.body.feedback;
-//     var name = req.body.name;
-//     var email = req.body.email;
-//     if (name === '') {
-//         name = 'No name'
-//     }
-//     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//     const msg = {
-//         to: 'developer.cutit@gmail.com',
-//         from: 'sopanmittal43@gmail.com',
-//         subject: 'Feedback by ' + name,
-//         text: text
-//     };
-//     sgMail.send(msg);
+app.post('/feedback', (req, res) => {
+    var text = req.body.feedback;
+    var name = req.body.name;
+    var email = req.body.email;
+    if (name === '') {
+        name = 'No name'
+    }
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+        to: process.env.DEVELOPER_EMAIL,
+        from: process.env.INFO_EMAIL,
+        subject: 'Feedback by ' + name,
+        text: text
+    };
+    sgMail.send(msg);
 
 
-//     if (email !== '') {
-//         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//         console.log(email);
-//         const msg2 = {
-//             to: email,
-//             from: 'info.cutit@gmail.com',
-//             subject: 'Thanks',
-//             text: 'text'
-//         };
-//         sgMail.send(msg2);
+    if (email !== '') {
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        console.log(email);
+        const msg2 = {
+            to: email,
+            from: process.env.INFO_EMAIL,
+            subject: process.env.EMAIL_SUBJECT,
+            text: process.env.EMAIL_BODY
+        };
+        sgMail.send(msg2);
 
-//     }
-//     res.send('DONE');
-// });
+    }
+    res.send('DONE');
+});
 
 
-app.get('s/:cut', (req, res) => {
-    conn.query('SELECT long_url FROM short_urls WHERE short_code = ?', [req.params.cut], (error, long_url) => {
-        if (error) {
-            console.log(error);
-        } else {
+app.get('/:cut', (req, res) => {
+    console.log(req.params.cut);
+    conn.query('SELECT * FROM short_urls WHERE short_code = ?', [req.params.cut])
+        .then(([long_url]) => {
             console.log('b => ' + long_url[0]);
             res.statusCode = 302;
             res.redirect(long_url[0].long_url);
             res.end('Redirecting to ' + long_url[0].long_url);
-
-
-        }
-    });
+        })
+        .catch((error) => {
+            console.log(error);
+            return res.json({ success: 0, message: 'error' });
+        });
 });
 
 
