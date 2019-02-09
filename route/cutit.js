@@ -26,20 +26,49 @@ app.post('/short', (req, res) => {
         console.log(req.body.custom_url);
         res.redirect('/');
     } else if (req.body.custom_url !== '') {
-        
+        conn.query('SELECT * FROM short_urls WHERE short_code = ?', [req.body.custom_url])
+            .then((data) => {
+                if (data[0].length === 0) {
+                    url = req.headers.host + '/' + req.body.custom_url;
+                    conn.query('INSERT INTO short_urls (long_url, short_code) VALUES (?, )', [req.body.original_url, req.body.custom_url])
+                        .then(() => {
+                            res.redirect('/short/url');
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            return res.json({ success: 0, message: 'error' });
+                        });
+
+                } else {
+                    console.log(data);
+                    genrate_unique_key().then((rstring) => {
+                        url = req.headers.host + '/' + rstring;
+                        conn.query('INSERT INTO short_urls (long_url, short_code) VALUES (?, ?)', [req.body.original_url, rstring])
+                            .then(() => {
+                                res.redirect('/short/url');
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                return res.json({ success: 0, message: 'error' });
+
+                            });
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                return res.send({ success: 0, message: 'error' });
+            });
+
     } else {
         genrate_unique_key().then((rstring) => {
             url = req.headers.host + '/' + rstring;
-            var upload_object = {
-                long_url: req.body.original_url,
-                short_code: rstring
-            };
-            conn.execute('INSERT INTO short_urls (long_url, short_code) VALUES (?, ?)', [req.body.original_url, rstring])
-            .then(() => {
-                res.redirect('/short/url');
-            }).catch((error) => {
-                return res.json({ success: 0, message: 'error' });
-            });
+            conn.execute('INSERT INTO short_urls (long_url, short_code) VALUES (?,?)', [req.body.original_url, rstring])
+                .then(() => {
+                    res.redirect('/short/url');
+                }).catch((error) => {
+                    return res.json({ success: 0, message: 'error' });
+                });
         }).catch((error) => {
             return res.json({ success: 0, message: 'Error ' + error });
         });
@@ -120,11 +149,9 @@ function check_unique_key(rstring, callback) {
     return new Promise((resolve, reject) => {
         conn.execute('SELECT short_code FROM short_urls WHERE short_code = ?', [rstring]).
         then(result => {
-            console.log(result);
             if (result[0].length === 0) {
                 resolve(rstring);
             } else {
-                // console.log('===========');
                 genrate_unique_key();
             }
 
