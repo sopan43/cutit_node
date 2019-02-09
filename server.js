@@ -1,13 +1,12 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var port = process.env.PORT || 3000;
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const port = process.env.PORT || 3000;
+const app = express();
 
-var question = require('./route/cutit.js');
-
+const question = require('./route/cutit.js');
+const connection = require('./connection');
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
-
 
 app.use('/', question);
 

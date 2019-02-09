@@ -1,13 +1,13 @@
-var conn = require('../connection.js');
-var express = require('express');
-var randomstring = require('randomstring');
-var bodyParser = require('body-parser');
-var path = require('path');
+const conn = require('../connection.js');
+const express = require('express');
+const randomstring = require('randomstring');
+const bodyParser = require('body-parser');
+const path = require('path');
 const sgMail = require('@sendgrid/mail');
-var router = express.Router();
-var app = express();
+const router = express.Router();
+const app = express();
 
-var url;
+let url;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('css'));

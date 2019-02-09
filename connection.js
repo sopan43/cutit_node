@@ -1,18 +1,18 @@
-var mysql = require('mysql');
+const mysql = require('mysql2');
 
-var connection = mysql.createConnection({
-    user: process.env.USER_CUTIT,
-    password: process.env.PASS_CUTIT,
-    database: process.env.DB_CUTIT,
-    host: process.env.HOST_CUTIT
+const pool = mysql.createPool({
+    user: 'root',
+    password: 'root',
+    database: 'cutit',
+    host: 'localhost'
 });
 
-connection.connect(function(error) {
-    if (error) {
-        console.error('error connecting: ' + error.stack);
-        return;
-    }
-    console.log('Connecting.... ');
-});
+// connection.connect(function(error) {
+//     if (error) {
+//         console.error('error connecting: ' + error.stack);
+//         return;
+//     }
+//     console.log('Connecting.... ');
+// });
 
-module.exports = connection;
+module.exports = pool.promise();
