@@ -8,10 +8,6 @@ const router = express.Router();
 const app = express();
 
 let url;
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('css'));
-app.set('view engine', 'ejs');
 /********************************************************************************************************************
  *                                          `                                                                       *
  *                                                  GET gentare                                                     *
