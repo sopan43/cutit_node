@@ -8,11 +8,11 @@ body{
 .center-form{
 	border: 2px solid white;
 	width: 360px;
-	height: 	280px;
+	height: 	320px;
 	margin: 200px auto;
 	box-shadow: 0 0 30px rgba(0,0,0,0.1);
 	text-align: center;
-	border-radius: 5%;
+	border-radius: 25px;
 	background: rgba(0,0,0,0.2);
 
 }
@@ -51,9 +51,12 @@ input {
 	font-size: 20px;
 	width: 340px;
 	box-sizing: border-box;	
-	border-radius: 5%;
+	border-radius: 25px;
 	color: white;
-margin-bottom: 20px;
+	margin-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	height: 40px;
 }
 
 input:focus{	
@@ -69,11 +72,12 @@ button{
 	color: white;
 	font-size: 20px;
 	width: 340px;
-	height: 30px;
+	height: 40px;
 	margin-right: 10px;
 	margin-left: 10px;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	border-radius: 25px;
 }
 
 button:hover{
