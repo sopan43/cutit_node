@@ -1,15 +1,16 @@
 body{
-	 background-image:url(../public/asd3.jpg); 
-	background-size: cover;
-	background-position: center;
 	font-family: 'Lato', sans-serif;
+	 background-image:url(../public/asd3.jpg);
+	padding-top: 10%;
+ 	background-repeat: no-repeat;
+ 	background-size: cover;
 }
 
 .center-form{
 	border: 2px solid white;
-	width: 500px;
-	height: 	320px;
-	margin: 200px auto;
+	width: 40%;
+	height: 	90%;
+	margin: auto auto;
 	box-shadow: 0 0 30px rgba(0,0,0,0.1);
 	text-align: center;
 	border-radius: 25px;
@@ -82,4 +83,8 @@ button{
 
 button:hover{
 	background: rgba(76, 175, 80, 0.9);
+}
+
+body, html {
+  height: 100%;
 }
