@@ -109,7 +109,7 @@ app.post('/feedback', (req, res) => {
         sgMail.send(msg2);
 
     }
-    res.send('DONE');
+    res.redirect('/');
 });
 
 
